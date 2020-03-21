@@ -1,0 +1,32 @@
+{% extends 'main/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HOME</title>
+</head>
+<body>
+    {% block content %}
+    {% if name %}
+    <h1>{{name}}</h1>
+    <br>
+    {% endif %}
+
+    
+    
+    {% for u in all_users %}
+        {% if u.pk != user.pk %}
+            <p>{{ u }}  {{ u.pk }}  <button><a href="{% url 'name_add_friend' pk=u.pk %}">Add Friend</a></button><button><a href="{% url 'name_remove_friend' pk=u.pk %}">Remove Friend</a></button>  </p>
+        {% endif %}
+    {% endfor %}
+
+    {% endblock %}
+    
+
+   
+    
+</body>
+</html>

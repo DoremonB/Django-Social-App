@@ -1,0 +1,76 @@
+{% extends 'main/base.html' %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Display_Profile</title>
+</head>
+<body>
+    
+    {% block content %}
+    
+    <button><a href="{% url 'name_add_friend' pk=u %}">Add Friend</a></button><button><a href="{% url 'name_remove_friend' pk=u %}">Remove Friend</a></button>  </p>
+
+    <a href="/main/set_profile" class="btn btn-primary">Update/Set your Profile </a>
+        <p>{{ name }}</p>
+        <p>{{ bio }}</p>
+        <p>{{ dob }}</p>
+        <img style="width: 200pxpx;height: 200px;" src="http://127.0.0.1:8000/media/{{ image_url }}" alt="Profile image ">
+        <br><br>
+        <h1>Timeline</h1>
+        <br>
+    
+    
+        {% for post in posts %}
+    
+
+        <div class="card" style="width: 20rem">
+            <img class="card-img-top" src="http://127.0.0.1:8000/media/{{ post.image_url }}" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">{{post.caption}}</h5>
+              <h5 class="card-title">Created By <strong>{{post.fk_user_id}}</strong></h5>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <a href="{% url 'name_show_like' pk=post.pk %}" class="card-link">View Likes</a>
+              
+              <a  id="like{{ post.id }}" data-catid="{{ post.id }}" class="likebutton card-link">Like</a>
+              <a href="/main/home" class="btn btn-primary">Go somewhere</a>
+              
+              
+                
+    
+                <p id="p1{{post.id}}">Like count:{{ post.like_count }}</p>
+            </div>
+        </div>
+    
+            
+        {% endfor %}
+        <script type="text/javascript"> 
+            $('.likebutton').click(function(event){
+                event.preventDefault()
+            var id; 
+            id = $(this).attr("data-catid"); 
+            $.ajax( 
+            { 
+                type:"GET", 
+                url: "http://127.0.0.1:8000/main/like/",
+                data:{ 
+                         post_id: id 
+            }, 
+            success: function( data ) 
+            { 
+                document.getElementById("p1"+id).innerHTML = 'Like count:'+data;
+                //$( '#like'+ id ).removeClass('btn btn-primary btn-lg'); 
+                //$( '#like'+ id ).addClass('btn btn-success btn-lg');
+                 } }) });
+                
+            </script>
+
+    {% endblock %}
+    
+    
+</body>
+</html>

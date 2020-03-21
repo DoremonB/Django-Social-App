@@ -1,0 +1,98 @@
+{% extends 'main/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HOME</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+</head>
+<body>
+    
+
+
+    {% block content %}
+    
+    <input type="text" list="languages">
+    {% if name %}
+    <h1>{{name}}</h1>
+    <br>
+    {% endif %}
+    
+    
+    {% for notif in notifs %}
+    
+    <br><br><br>
+            {% if notif.notif_type == 2 %}
+            
+            <p>Sent By :{{notif.fk_sender_id}}</p>
+            <p>{{notif.content}}</p>
+            <p>{{notif.notif_type}}</p>
+            <p>
+                <a href="{% url 'name_add_friend' pk=notif.fk_sender_id.pk %}">Add Friend</a>
+                <a href="{% url 'name_delete_notification' pk=notif.pk %}">Delete Notification</a>
+            </p>
+
+            {% elif notif.notif_type == 0 %}
+            
+            <p>Sent By :{{notif.fk_sender_id}}</p>
+            <p>{{notif.content}}</p>
+            <p>{{notif.notif_type}}</p>
+            <p>
+                <a href="{% url 'name_display_single_post' pk=notif.fk_post_id.id %}">Link</a>
+                <a href="{% url 'name_delete_notification' pk=notif.pk %}">Delete Notification</a>
+            </p>
+
+            {% elif notif.notif_type == 3 %}
+            
+            <p>Sent By :{{notif.fk_sender_id}}</p>
+            <p>{{notif.content}}</p>
+            <p>{{notif.notif_type}}</p>
+            <p>
+                <a href="{% url 'name_display_single_post' pk=notif.fk_post_id.id %}">Link</a>
+                <a href="{% url 'name_delete_notification' pk=notif.pk %}">Delete Notification</a>
+            </p>
+
+            
+            
+            {% endif %}
+            
+        
+
+        
+        
+        
+    {% endfor %}
+    <!-- <script type="text/javascript"> 
+
+        
+
+        $('.likebutton').click(function(event){
+            event.preventDefault()
+        var id; 
+        id = $(this).attr("data-catid"); 
+        $.ajax( 
+        { 
+            type:"GET", 
+            url: "like", 
+            data:{ 
+                     post_id: id 
+        }, 
+        success: function( data ) 
+        { 
+            document.getElementById("p1"+id).innerHTML = 'Like count:'+data;
+            //$( '#like'+ id ).removeClass('btn btn-primary btn-lg'); 
+            //$( '#like'+ id ).addClass('btn btn-success btn-lg');
+             } }) });
+            
+        </script> -->
+
+    {% endblock %}
+    
+
+   
+    
+</body>
+</html>
