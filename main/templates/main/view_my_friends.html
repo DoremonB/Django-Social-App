@@ -17,8 +17,11 @@
 
     
     
+    <h1>My Friends</h1>
     {% for u in my_friends %}
-        <p>{{ u }}  {{ u.pk }}  </p>
+        {% if u.pk != user.pk %}
+            <p>{{ u }}  {{ u.pk }}  <button><a href="{% url 'name_remove_friend' pk=u.pk %}">Remove Friend</a></button>  </p>
+        {% endif %}
     {% endfor %}
 
     {% endblock %}

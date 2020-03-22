@@ -17,11 +17,28 @@
 
     
     
-    {% for u in all_users %}
+    <!-- {% for u in all_users %}
         {% if u.pk != user.pk %}
             <p>{{ u }}  {{ u.pk }}  <button><a href="{% url 'name_add_friend' pk=u.pk %}">Add Friend</a></button><button><a href="{% url 'name_remove_friend' pk=u.pk %}">Remove Friend</a></button>  </p>
         {% endif %}
+    {% endfor %} -->
+
+    <h1>Explore new people</h1>
+    {% for u in my_not_friends %}
+        {% if u.pk != user.pk %}
+            <p>{{ u }}  {{ u.pk }}  <button><a href="{% url 'name_add_friend' pk=u.pk %}">Add Friend</a></button>  </p>
+        {% endif %}
     {% endfor %}
+
+    <br><br><br>
+    <h1>My Friends</h1>
+    {% for u in my_friends %}
+        {% if u.pk != user.pk %}
+            <p>{{ u }}  {{ u.pk }}  <button><a href="{% url 'name_remove_friend' pk=u.pk %}">Remove Friend</a></button>  </p>
+        {% endif %}
+    {% endfor %}
+
+    
 
     {% endblock %}
     

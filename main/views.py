@@ -217,9 +217,20 @@ def show_like(request,pk):
 @login_required
 def view_all_users(request):
     profile=OneToOneProfile.objects.filter(fk_user_id=request.user)[0] 
+    q1=User.objects.all()
+    q2=profile.Friends.all()
+
+    # intersection=q1 and q2
+    # print(intersection)
+
+    notfriends=q1.difference(q2)    
+    friends=q2
+    print(notfriends)
+
     context={
         'all_users':User.objects.all(),
-        'my_friends':profile.Friends.all()
+        'my_friends':profile.Friends.all(),
+        'my_not_friends':notfriends
     }
     return render(request,'main/view_all_users.html',context)
 
@@ -280,6 +291,11 @@ def display_single_post(request,pk):
 
             n=Notification(notif_type=3,fk_sender_id=request.user,fk_receiver_id=post.fk_user_id,fk_post_id=post,content=f"{request.user} commented on Post:'{p.caption}'")
             n.save()
+
+            curr_comment_count=post.comment_count
+            post.comment_count=curr_comment_count+1
+            post.save()
+            
     else:
         form=CommentForm
         return render(request,'main/display_single_post.html',{'form':form,'post':post,'comments':comments})

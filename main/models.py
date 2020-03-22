@@ -11,6 +11,7 @@ class Post(models.Model):
     fk_user_id=models.ForeignKey(User,on_delete=models.CASCADE)
     post_type=models.IntegerField(default=0)
     like_count=models.IntegerField(default=0)
+    comment_count=models.IntegerField(default=0)
 
 
 class Comments(models.Model):
