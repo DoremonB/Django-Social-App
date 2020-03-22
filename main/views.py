@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect,HttpResponse
+from django.http import JsonResponse
 from .forms import *
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login,logout,authenticate
@@ -123,37 +124,95 @@ def get_profile(request,pk):
 
 @login_required
 def add_friend(request,pk):
-    profile=OneToOneProfile.objects.filter(fk_user_id=request.user)[0] 
-    requested_user=User.objects.filter(pk=pk)[0]
+    if request.method == 'GET':
+        profile=OneToOneProfile.objects.filter(fk_user_id=request.user)[0] 
+        requested_user=User.objects.filter(pk=pk)[0]
 
-    profile.Friends.add(requested_user)
+        profile.Friends.add(requested_user)
 
-    n=Notification(notif_type=2,fk_sender_id=request.user,fk_receiver_id=requested_user,content=f"{request.user} sent you a Friend Request")
-    n.save()
+        n=Notification(notif_type=2,fk_sender_id=request.user,fk_receiver_id=requested_user,content=f"{request.user} sent you a Friend Request")
+        n.save()
 
-    name=profile.display_name
-    bio=profile.bio
-    dob=profile.dob
-    image_url=profile.image_url
+        name=profile.display_name
+        bio=profile.bio
+        dob=profile.dob
+        image_url=profile.image_url
 
-    return redirect('name_view_my_friends')
+
+        #Now adding code for sending data to ajax
+        profile=OneToOneProfile.objects.filter(fk_user_id=request.user)[0] 
+
+        # ip = request.GET.get('ip', None)
+        q1=User.objects.all()
+        q2=profile.Friends.all()
+
+        # intersection=q1 and q2
+        # print(intersection)
+
+        notfriends=q1.difference(q2)    
+        friends=q2
+        
+
+        data={
+            'all_users':list(q1.values()),
+            'my_friends':list(q2.values()),
+            'my_not_friends':list(notfriends.values()),
+            'comeplete_user_list_without_filter':list(User.objects.all().values())
+        }
+
+        # return redirect('name_view_my_friends')
+        return JsonResponse(data)
+    else:
+        data={
+            'error':"falied",
+        }
+        return JsonResponse(data)
 
 @login_required
 def remove_friend(request,pk):
-    profile=OneToOneProfile.objects.filter(fk_user_id=request.user)[0] 
-    requested_user=User.objects.filter(pk=pk)[0]
+    if request.method == 'GET':
+        profile=OneToOneProfile.objects.filter(fk_user_id=request.user)[0] 
+        requested_user=User.objects.filter(pk=pk)[0]
 
-    profile.Friends.remove(requested_user)
+        profile.Friends.remove(requested_user)
 
-    Notification.objects.filter(notif_type=2).filter(fk_sender_id=request.user).filter(fk_receiver_id=requested_user).delete()
+        Notification.objects.filter(notif_type=2).filter(fk_sender_id=request.user).filter(fk_receiver_id=requested_user).delete()
 
 
-    name=profile.display_name
-    bio=profile.bio
-    dob=profile.dob
-    image_url=profile.image_url
+        name=profile.display_name
+        bio=profile.bio
+        dob=profile.dob
+        image_url=profile.image_url
 
-    return redirect('name_view_my_friends')
+        #return redirect('name_view_my_friends')
+        #Now adding code for sending data to ajax
+        profile=OneToOneProfile.objects.filter(fk_user_id=request.user)[0] 
+
+        # ip = request.GET.get('ip', None)
+        q1=User.objects.all()
+        q2=profile.Friends.all()
+
+        # intersection=q1 and q2
+        # print(intersection)
+
+        notfriends=q1.difference(q2)    
+        friends=q2
+        
+
+        data={
+            'all_users':list(q1.values()),
+            'my_friends':list(q2.values()),
+            'my_not_friends':list(notfriends.values()),
+            'comeplete_user_list_without_filter':list(User.objects.all().values())
+        }
+
+        # return redirect('name_view_my_friends')
+        return JsonResponse(data)
+    else:
+        data={
+            'error':"falied",
+        }
+        return JsonResponse(data)
 
 
 
@@ -225,7 +284,7 @@ def view_all_users(request):
 
     notfriends=q1.difference(q2)    
     friends=q2
-    print(notfriends)
+    
 
     context={
         'all_users':User.objects.all(),
@@ -304,6 +363,35 @@ def display_single_post(request,pk):
 def delete_notification(request,pk):
     Notification.objects.filter(pk=pk).delete()
     return redirect('name_notifications')
+
+def search(request):
+    if request.method=="GET":
+        profile=OneToOneProfile.objects.filter(fk_user_id=request.user)[0] 
+
+        ip = request.GET.get('ip', None)
+        q1=User.objects.filter(username__startswith=ip)
+        q2=profile.Friends.filter(username__startswith=ip)
+
+        # intersection=q1 and q2
+        # print(intersection)
+
+        notfriends=q1.difference(q2)    
+        friends=q2
+        
+
+        data={
+            'all_users':list(q1.values()),
+            'my_friends':list(q2.values()),
+            'my_not_friends':list(notfriends.values()),
+            'comeplete_user_list_without_filter':list(User.objects.all().values())
+        }
+        return JsonResponse(data)
+    else:
+        data={
+            'error':"falied",
+        }
+        return JsonResponse(data)
+    
 
 # def add_comment(request,postId):
 #     form=CommentForm

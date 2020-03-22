@@ -25,6 +25,7 @@ urlpatterns = [
     #path('add_comment/<int:postId>',views.add_comment,name='name_add_comment'),
     path('delete_nofitication/<int:pk>',views.delete_notification,name='name_delete_notification'),
 
-    path('like/', views.like, name='like')
+    path('like/', views.like, name='like'),
+    path('search/', views.search, name='search'),
     
 ]
