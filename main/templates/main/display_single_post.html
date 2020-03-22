@@ -16,45 +16,55 @@
 
     {% block content %}
     
-    <input type="text" list="languages">
+    
     {% if name %}
     <h1>{{name}}</h1>
     <br>
     {% endif %}
     
     
-    
+    <h1 class="display-4">Post</h1>
     
 
-    <div class="card" style="width: 20rem">
-        <img class="card-img-top" src="http://127.0.0.1:8000/media/{{ post.image_url }}" alt="Card image cap">
+    <div class="jumbotron card" >
+        <img class="card-img-top" style="width: 150px;height: 150px;" src="http://127.0.0.1:8000/media/{{ post.image_url }}" alt="Card image cap">
         <div class="card-body">
-          <h5 class="card-title">{{post.caption}}</h5>
-          <h5 class="card-title">Created By <strong>{{post.fk_user_id}}</strong></h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="{% url 'name_show_like' pk=post.pk %}" class="card-link">View Likes</a>
+            <h1 class="display-4" style="color: darkmagenta;">{{post.caption}}</h1>
           
-          <a  id="like{{ post.id }}" data-catid="{{ post.id }}" class="likebutton card-link">Like</a>
-          <a href="/main/home" class="btn btn-primary">Go somewhere</a>
+          <h5 class="card-title">created by <strong>{{post.fk_user_id}}</strong> on <strong>{{post.date_time}}</strong></h5>
+          
+          <a href="{% url 'name_show_like' pk=post.pk %}" class="btn btn-primary">View Likes</a>
+          
+          <a  id="like{{ post.id }}" data-catid="{{ post.id }}" class="likebutton btn btn-primary" style="color: aliceblue;">Like</a>
+          <a href="{% url 'name_display_single_post' pk=post.pk %}" class="btn btn-primary">Add Comment</a>
           
           
             
 
             <p id="p1{{post.id}}">Like count:{{ post.like_count }}</p>
+            <p id="p2{{post.id}}">Comment count:{{ post.comment_count }}</p>
         </div>
     </div>
 
-
     <br><br><br><br>
+    <h1 class="display-4">Comment Section</h1>
     {% for comment in comments %}
     
-    {% if comment.image_url %}
+    
+    
+
+    <div class="jumbotron">
+        
+        
+        <h1 class="display-4">{{comment.fk_user_id}}</h1>
+        <p class="lead">{{comment.content}}</p>
+        {% if comment.image_url %}
         <img style="width: 50px;height: 50px;" src="http://127.0.0.1:8000/media/{{ comment.image_url }}" alt="Card image cap">
-    {% endif %}
-    <p>{{comment.content}}</p>
-    <p>{{comment.date_time}}</p>
-    <p>{{comment.fk_user_id}}</p>
-    <p>{{comment.fk_post_id}}</p>
+        {% endif %}
+        <hr class="my-4">
+        <p class="lead">{{comment.date_time}}</p>
+        
+      </div>
 
     <br><br>
     

@@ -13,41 +13,60 @@
     
     {% block content %}
     
-    <button><a href="{% url 'name_add_friend' pk=u %}">Add Friend</a></button><button><a href="{% url 'name_remove_friend' pk=u %}">Remove Friend</a></button>  </p>
+    
 
-    <a href="/main/set_profile" class="btn btn-primary">Update/Set your Profile </a>
-        <p>{{ name }}</p>
-        <p>{{ bio }}</p>
-        <p>{{ dob }}</p>
-        <img style="width: 200pxpx;height: 200px;" src="http://127.0.0.1:8000/media/{{ image_url }}" alt="Profile image ">
+    
+        
+        
+
+        <div class="card text-center container jumbotron" style="width: 300px;">
+            <div class="card-header">
+              Profile
+            </div>
+            <img style="width: 200px;height: 200px;" src="http://127.0.0.1:8000/media/{{ image_url }}" alt="Profile image ">
+            <div class="card-body">
+              <h5 class="card-title">{{ name }}</h5>
+              <p class="card-text">{{ bio }}</p>
+              <p class="card-text">{{ dob }}</p>
+              
+            </div>
+            <div class="card-footer text-muted">
+                <p><a href="/main/set_profile" class="btn btn-primary">Update/Set your Profile </a></p>
+                <p><a href="{% url 'name_add_friend' pk=u %}" class="btn btn-primary m-2">Add Friend</a>
+                <a href="{% url 'name_remove_friend' pk=u %}" class="btn btn-primary">Remove Friend</a></p>
+            </div>
+          </div>
+        
         <br><br>
-        <h1>Timeline</h1>
+        <div style="background-color: whitesmoke;"><h1 class="display-1 text-center">Timeline</h1></div>
         <br>
     
     
         {% for post in posts %}
     
 
-        <div class="card" style="width: 20rem">
-            <img class="card-img-top" src="http://127.0.0.1:8000/media/{{ post.image_url }}" alt="Card image cap">
-            <div class="card-body">
-              <h5 class="card-title">{{post.caption}}</h5>
-              <h5 class="card-title">Created By <strong>{{post.fk_user_id}}</strong></h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <a href="{% url 'name_show_like' pk=post.pk %}" class="card-link">View Likes</a>
-              
-              <a  id="like{{ post.id }}" data-catid="{{ post.id }}" class="likebutton card-link">Like</a>
-              <a href="/main/home" class="btn btn-primary">Go somewhere</a>
-              
-              
-                
-    
-                <p id="p1{{post.id}}">Like count:{{ post.like_count }}</p>
-            </div>
-        </div>
-    
+    <div class="jumbotron card" >
+        <img class="card-img-top" style="width: 150px;height: 150px;" src="http://127.0.0.1:8000/media/{{ post.image_url }}" alt="Card image cap">
+        <div class="card-body">
+            <h1 class="display-4" style="color: darkmagenta;">{{post.caption}}</h1>
+          
+          <h5 class="card-title">created by <strong>{{post.fk_user_id}}</strong> on <strong>{{post.date_time}}</strong></h5>
+          
+          <a href="{% url 'name_show_like' pk=post.pk %}" class="btn btn-primary">View Likes</a>
+          
+          <a  id="like{{ post.id }}" data-catid="{{ post.id }}" class="likebutton btn btn-primary" style="color: aliceblue;">Like</a>
+          <a href="{% url 'name_display_single_post' pk=post.pk %}" class="btn btn-primary">Add Comment</a>
+          
+          
             
-        {% endfor %}
+
+            <p id="p1{{post.id}}">Like count:{{ post.like_count }}</p>
+            <p id="p2{{post.id}}">Comment count:{{ post.comment_count }}</p>
+        </div>
+    </div>
+
+        
+    {% endfor %}
         <script type="text/javascript"> 
             $('.likebutton').click(function(event){
                 event.preventDefault()

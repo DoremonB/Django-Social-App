@@ -6,7 +6,7 @@ from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.decorators import login_required
 from .models import *
 # Create your views here.
-
+@login_required
 def home(request):
 
     try:
@@ -79,9 +79,10 @@ def view_login(request):
     return render(request,'main/login.html',{"form":form})
 
 #working
+@login_required
 def view_logout(request):
     logout(request)
-    return redirect("name_home")
+    return redirect("name_login")
 
 @login_required
 def set_profile(request):
@@ -160,8 +161,8 @@ def add_friend(request,pk):
             'comeplete_user_list_without_filter':list(User.objects.all().values())
         }
 
-        # return redirect('name_view_my_friends')
-        return JsonResponse(data)
+        return redirect('name_view_all_friends')
+        # return JsonResponse(data)
     else:
         data={
             'error':"falied",
@@ -248,26 +249,27 @@ def put_post(request,posttype):
             return render(request,'main/post_photo.html',{'form':form})
     return render(request,'main/post_photo.html',{'form':form})
 
-@login_required
-def like(request,pk):
+# @login_required
+# def like(request,pk):
     
-    p=Post.objects.filter(pk=pk)[0]
-    l=Likes.objects.filter(fk_post_id=pk).filter(fk_user_id=request.user)
-    print(l)
-    if len(l)==0:
-        new_l=Likes(fk_user_id=request.user,fk_post_id=p)
-        new_l.save()
-        curr_like_count=p.like_count
-        p.like_count=curr_like_count+1
-        p.save()
-    else:
-        l.delete()
-        curr_like_count=p.like_count
-        p.like_count=curr_like_count-1
-        p.save()
+#     p=Post.objects.filter(pk=pk)[0]
+#     l=Likes.objects.filter(fk_post_id=pk).filter(fk_user_id=request.user)
+#     print(l)
+#     if len(l)==0:
+#         new_l=Likes(fk_user_id=request.user,fk_post_id=p)
+#         new_l.save()
+#         curr_like_count=p.like_count
+#         p.like_count=curr_like_count+1
+#         p.save()
+#     else:
+#         l.delete()
+#         curr_like_count=p.like_count
+#         p.like_count=curr_like_count-1
+#         p.save()
         
-    return redirect('name_home')
+#     return redirect('name_home')
 
+@login_required
 def show_like(request,pk):
     l=Likes.objects.filter(fk_post_id=pk)
     post=Post.objects.filter(pk=pk)[0]
@@ -331,10 +333,12 @@ def like(request):
     else:
         return HttpResponse("unsuccesful")
 
+@login_required
 def notifications(request):
     notifs=Notification.objects.filter(fk_receiver_id=request.user).order_by("-date_time")
     return render(request,'main/notifications.html',{'notifs':notifs})
 
+@login_required
 def display_single_post(request,pk):
     post=Post.objects.filter(pk=pk)[0]
     form=CommentForm
@@ -360,10 +364,12 @@ def display_single_post(request,pk):
         return render(request,'main/display_single_post.html',{'form':form,'post':post,'comments':comments})
     return render(request,'main/display_single_post.html',{'form':form,'post':post,'comments':comments})
 
+@login_required
 def delete_notification(request,pk):
     Notification.objects.filter(pk=pk).delete()
     return redirect('name_notifications')
 
+@login_required
 def search(request):
     if request.method=="GET":
         profile=OneToOneProfile.objects.filter(fk_user_id=request.user)[0] 

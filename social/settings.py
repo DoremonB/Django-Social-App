@@ -131,3 +131,6 @@ CRISPY_TEMPLATE_PACK='bootstrap4'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') 
 MEDIA_URL = '/media/'
 
+#if anyone who is not logged in tries to access restriced page(where only logged in user can have access) then he will be redirected to this url(name)
+LOGIN_URL='name_login'
+

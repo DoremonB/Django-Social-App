@@ -15,7 +15,7 @@
 
     {% block content %}
     
-    <input type="text" list="languages">
+    
     {% if name %}
     <h1>{{name}}</h1>
     <br>
@@ -26,34 +26,50 @@
     
     <br><br><br>
             {% if notif.notif_type == 2 %}
+
+            <div class="jumbotron">
+                <h1 class="display-4">sent by :  {{notif.fk_sender_id}}</h1>
+                <p class="lead">{{notif.content}}</p>
+                <hr class="my-4">
+                <p>{{ notif.date_time }}</p>
+                <p>
+                    <a class="btn btn-primary" href="{% url 'name_add_friend' pk=notif.fk_sender_id.pk %}">Add Friend</a>
+                    <a  class="btn btn-primary" href="{% url 'name_delete_notification' pk=notif.pk %}">Delete Notification</a>
+                </p>
+            </div>
             
-            <p>Sent By :{{notif.fk_sender_id}}</p>
-            <p>{{notif.content}}</p>
-            <p>{{notif.notif_type}}</p>
-            <p>
-                <a href="{% url 'name_add_friend' pk=notif.fk_sender_id.pk %}">Add Friend</a>
-                <a href="{% url 'name_delete_notification' pk=notif.pk %}">Delete Notification</a>
-            </p>
+           
 
             {% elif notif.notif_type == 0 %}
+
+            <div class="jumbotron">
+                <h1 class="display-4">sent by :  {{notif.fk_sender_id}}</h1>
+                <p class="lead">{{notif.content}}</p>
+                <hr class="my-4">
+                <p>{{ notif.date_time }}</p>
+                <p>
+                    <a class="btn btn-primary" href="{% url 'name_display_single_post' pk=notif.fk_post_id.id %}">Link</a>
+                    <a class="btn btn-primary" href="{% url 'name_delete_notification' pk=notif.pk %}">Delete Notification</a>
+                </p>
+            </div>
             
-            <p>Sent By :{{notif.fk_sender_id}}</p>
-            <p>{{notif.content}}</p>
-            <p>{{notif.notif_type}}</p>
-            <p>
-                <a href="{% url 'name_display_single_post' pk=notif.fk_post_id.id %}">Link</a>
-                <a href="{% url 'name_delete_notification' pk=notif.pk %}">Delete Notification</a>
-            </p>
+            
 
             {% elif notif.notif_type == 3 %}
             
-            <p>Sent By :{{notif.fk_sender_id}}</p>
-            <p>{{notif.content}}</p>
-            <p>{{notif.notif_type}}</p>
-            <p>
-                <a href="{% url 'name_display_single_post' pk=notif.fk_post_id.id %}">Link</a>
-                <a href="{% url 'name_delete_notification' pk=notif.pk %}">Delete Notification</a>
-            </p>
+            <div class="jumbotron">
+                <h1 class="display-4">sent by :  {{notif.fk_sender_id}}</h1>
+                <p class="lead">{{notif.content}}</p>
+                <hr class="my-4">
+                <p>{{ notif.date_time }}</p>
+                <p>
+                    <a class="btn btn-primary" href="{% url 'name_display_single_post' pk=notif.fk_post_id.id %}">Link</a>
+                    <a class="btn btn-primary" href="{% url 'name_delete_notification' pk=notif.pk %}">Delete Notification</a>
+                </p>
+            </div>
+            
+            
+           
 
             
             

@@ -14,7 +14,7 @@ urlpatterns = [
     # path('landing_page/', views.landing_page,name='name_landing'),
     path('view_all_users/',views.view_all_users,name='name_view_all_users'),
     path('view_my_friends/',views.view_my_friends,name='name_view_my_friends'),
-    path('like/<int:pk>',views.like,name='name_like'),
+    # path('like/<int:pk>',views.like,name='name_like'),
     path('show_like/<int:pk>',views.show_like,name='name_show_like'),
 
     path('add_friend/<int:pk>',views.add_friend,name='name_add_friend'),
